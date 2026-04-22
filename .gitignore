@@ -1,0 +1,11 @@
+.DS_Store
+**/.DS_Store
+
+# IDE
+.idea/
+**/.idea/
+*.iml
+.vscode/
+
+# Local overrides (optional per developer)
+**/application-local.properties
