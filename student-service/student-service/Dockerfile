@@ -12,5 +12,6 @@ RUN ./mvnw -q -DskipTests clean package
 FROM eclipse-temurin:24-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-EXPOSE 10000
+# Render injects PORT; Spring reads server.port from env
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
