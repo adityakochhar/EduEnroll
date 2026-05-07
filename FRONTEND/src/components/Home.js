@@ -126,11 +126,12 @@ const Home = () => {
       { threshold: 0.4 }
     );
 
-    if (statsRef.current) statsObserver.observe(statsRef.current);
+    const statsEl = statsRef.current;
+    if (statsEl) statsObserver.observe(statsEl);
 
     return () => {
       revealRefs.current.forEach((r) => r && revealObserver.unobserve(r));
-      if (statsRef.current) statsObserver.unobserve(statsRef.current);
+      if (statsEl) statsObserver.unobserve(statsEl);
     };
   }, [statsStarted]);
 
