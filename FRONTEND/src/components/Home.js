@@ -1,7 +1,8 @@
 // src/components/Home.js
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios"; // ✅ added axios
+import axios from "axios";
+import { COURSE_API_ORIGIN } from "../config/api";
 
 const Feature = ({ title, text, index, observeRef }) => (
   <div
@@ -62,7 +63,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPopularCourses = async () => {
       try {
-        const res = await axios.get("http://localhost:8081/api/courses/popular");
+        const res = await axios.get(`${COURSE_API_ORIGIN}/api/courses/popular`);
         setPopularCourses(res.data.slice(0, 3)); // ✅ Only top 3 courses
         setError(false);
       } catch (err) {
@@ -78,7 +79,7 @@ const Home = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:8081/api/courses/stats");
+        const res = await axios.get(`${COURSE_API_ORIGIN}/api/courses/stats`);
         setCoursesCount(res.data.totalCourses);
         setStudentsCount(res.data.totalStudents);
       } catch (err) {

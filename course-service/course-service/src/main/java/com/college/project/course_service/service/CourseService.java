@@ -3,6 +3,7 @@ package com.college.project.course_service.service;
 import com.college.project.course_service.entity.Course;
 import com.college.project.course_service.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,7 +21,8 @@ public class CourseService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String STUDENT_SERVICE_URL = "http://localhost:8080/api/student";
+    @Value("${app.student.api.base-url:http://localhost:8080/api/student}")
+    private String studentApiBase;
 
     // ✅ Get all courses
     public List<Course> getAllCourses() {
@@ -53,7 +55,7 @@ public class CourseService {
             HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
             restTemplate.exchange(
-                    STUDENT_SERVICE_URL + "/remove-course/" + courseId,
+                    studentApiBase + "/remove-course/" + courseId,
                     HttpMethod.DELETE,
                     requestEntity,
                     Void.class
