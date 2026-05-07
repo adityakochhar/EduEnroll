@@ -3,6 +3,7 @@ package com.college.project.course_service.controller;
 import com.college.project.course_service.entity.Course;
 import com.college.project.course_service.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -23,7 +24,8 @@ public class CourseController {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String STUDENT_SERVICE_URL = "http://localhost:8080/api/student";
+    @Value("${app.student.api.base-url:http://localhost:8080/api/student}")
+    private String studentApiBase;
 
     // ✅ Get all courses
     @GetMapping
@@ -97,7 +99,7 @@ public class CourseController {
             HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
             restTemplate.exchange(
-                    STUDENT_SERVICE_URL + "/remove-course/" + id,
+                    studentApiBase + "/remove-course/" + id,
                     HttpMethod.DELETE,
                     requestEntity,
                     Void.class
@@ -127,7 +129,7 @@ public class CourseController {
             HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                    STUDENT_SERVICE_URL + "/course-popularity",
+                    studentApiBase + "/course-popularity",
                     HttpMethod.GET,
                     requestEntity,
                     Map.class
@@ -173,7 +175,7 @@ public class CourseController {
         // Total students - call student service
         try {
             ResponseEntity<Long> response = restTemplate.getForEntity(
-                    "http://localhost:8080/api/student/count", Long.class
+                    studentApiBase + "/count", Long.class
             );
             stats.put("totalStudents", response.getBody());
         } catch (Exception e) {

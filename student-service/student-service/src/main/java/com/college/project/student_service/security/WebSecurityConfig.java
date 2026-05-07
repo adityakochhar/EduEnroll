@@ -3,6 +3,7 @@ package com.college.project.student_service.security;
 import com.college.project.student_service.security.jwt.AuthTokenFilter;
 import com.college.project.student_service.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -68,11 +69,17 @@ public class WebSecurityConfig {
 
     // This bean configures CORS globally, which is a best practice
     @Bean
-    public CorsFilter corsFilter() {
+    public CorsFilter corsFilter(
+            @Value("${cors.allowed-origins:http://localhost:3000}") String allowedOrigins) {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000"); // Allow your React app's origin
+        for (String origin : allowedOrigins.split(",")) {
+            String trimmed = origin.trim();
+            if (!trimmed.isEmpty()) {
+                config.addAllowedOrigin(trimmed);
+            }
+        }
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
